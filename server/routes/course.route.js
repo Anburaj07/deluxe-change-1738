@@ -3,10 +3,8 @@ const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
 
 const CourseModel = require("../models/course.models")
-const auth = require("../middlewares/auth.middlewares")
 const router=express.Router()
 
-router.use(auth)
 router.post("/addcourse",async(req,res)=>{
  
     try {
@@ -22,17 +20,28 @@ router.post("/addcourse",async(req,res)=>{
     }
 })
 router.get("/",async(req,res)=>{
-    const {title}=req.query
+    const {title,category}=req.query
+    
+    let condition ={}
+   
     try {
         if(title){
-          let condition ={title:new RegExp(title)}
-          const course=await CourseModel.find(condition)
-         return res.status(200).send({"Course":course})
-        }else{
-            const courses=await CourseModel.find({})
-            // console.log(course)
-           return res.status(200).send({"Course":courses})  
+          condition["title"]=new RegExp(title,"i")
         }
+        if(category){
+            condition.category=category
+          }
+          const sorting = {};
+          if (req.query.sort === 'rating') {
+              sorting.rating = req.query.sortOrder === 'asc' ? 1 : -1;
+            } else if (req.query.sort === 'price') {
+              sorting.price = req.query.sortOrder === 'asc' ? 1 : -1;
+            }
+          let courses=await CourseModel.find(condition).sort(sorting)
+          
+         
+           return res.status(200).send({"Course":courses})  
+        
     } catch (error) {
         console.log(error)
        return res.status(400).send( {"msg":"Something went wrong",error:error})
@@ -47,9 +56,9 @@ router.patch("/update/:id",async(req,res)=>{
     const course=await CourseModel.findById(id)
     try {
         if(useremail==course.email){
-            const courses=await CourseModel.findByIdAndUpdate(id,req.body)
-            const data=await CourseModel.findById(id)
-           return res.status(200).send({"Course":data})  
+            const course=await CourseModel.findByIdAndUpdate(id,req.body,{new:true})
+            
+           return res.status(200).send({"Course":course})  
         }
         else{
            return res.status(400).send("You Are Not Authorized")
@@ -84,16 +93,29 @@ router.delete("/delete/:id",async(req,res)=>{
     }
 })
 
-router.get("/singleProductPage/:courseId", async (req, res) => {
-    const { courseId } = req.params;    
-    console.log('courseId:', courseId)
+// router.get("/singleCourse/:id",async(req,res)=>{
+//     const {id}=req.params
+//     try {
+//             const course=await CourseModel.findById(id)
+//             // console.log(course)
+//            return res.status(200).json({course})  
+//     } catch (error) {
+//         console.log(error)
+//        return res.status(400).send( {"msg":"Something went wrong",error:error})
+//     }
+// })
+
+router.get("/singleCourse/:id", async (req, res) => {
     try {
-      const singleProductPage = await CourseModel.findOne({_id:courseId});
-      console.log('singleProductPage:', singleProductPage)
-      if (!singleProductPage) {
-        return res.status(404).json({ error: "Product not found" });
+        const {id} = req.params;    
+        // console.log('id:', id) 
+      const course = await CourseModel.findOne({_id:id});
+    //   console.log('course:', course)
+      if (!course) {
+         res.status(404).json({ error: "course not found" });
+      }else{
+          res.status(200).json(course);
       }
-      res.status(200).json(singleProductPage);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

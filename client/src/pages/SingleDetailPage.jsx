@@ -16,58 +16,85 @@ import {
   useColorModeValue,
   List,
   ListItem,
+  SkeletonText,
+  useToast,
 } from "@chakra-ui/react";
+
 // import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import RatingStars from "../components/RatingComponent/RatingStars";
 
 export const SingleDetailPage = () => {
   const { courseId } = useParams();
-  console.log('courseId:', courseId)
+  const [loading,setLoading]=useState(false)
   const token = localStorage.getItem("frontendtoken");
   const [course, setCourse] = useState({});
   const navigate=useNavigate()
+  const toast = useToast();
    useEffect(() => {
+    setLoading(true)
     fetch(
-      `https://etutorhub-server.onrender.com/course/singleProductPage/${courseId}`,
+      `https://etutorhub-server.onrender.com/course/singleCourse/${courseId}`,
+      // `http://localhost:8080/course/singleCourse/${courseId}`,
       {
         method: "GET",
+        // headers: {
+        //   "Authorization":localStorage.getItem('frontendtoken')
+        // },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setLoading(false)
+        console.log(data,'data')
+        setCourse(data)
+      })
+      .catch((err) => console.log(err));
+  }, [courseId]);
+
+  const addToCart = () => {
+    // console.log(localStorage.getItem('frontendtoken'))
+    fetch(
+      `https://etutorhub-server.onrender.com/users/cart/${courseId}`,
+      // `http://localhost:8080/users/cart/${courseId}`,
+      {
+        method: "PATCH",
         headers: {
-          // authorization: `Bearer ${localStorage.getItem("frontendtoken")}`
           "Authorization":localStorage.getItem('frontendtoken')
         },
       }
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data,'data')
-        setCourse(data)
+        console.log(data)
+        if(data.msg=='Course already exist in cart!'){
+          toast({
+            title: "Course already exist in cart!", 
+            description: "Please add some other courses..",
+            status: "info",
+            duration: 9000,
+            isClosable: true,
+            position: "top",
+          })
+        }
+       else{
+          toast({
+            title: "Course Added to Cart!",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+            position: "top",
+          })
+          navigate("/cart")
+        }
       })
       .catch((err) => console.log(err));
-    // singlePage()
-  }, [courseId]);
+    };
 
-  // const addToCart = () => {
-  // // localStorage.setItem("cart", course.price);
-  // fetch(
-  //   `https://anxious-bull-glasses.cyclic.app/users/cart/${courseId}`,
-  //   {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       authorization: `Bearer ${localStorage.getItem("frontendtoken")}`
-  //     },
-  //   }
-  // )
-  //   .then((res) => res.json())
-  //   .then((data) => console.log(data))
-  //   .catch((err) => console.log(err));
-  // };
-
-  const addToCart=()=>{
-    alert('Course successfully purchased!!')
-  }
-  return (
-    <Container maxW={"7xl"} pt={{ base: "50px", md: "40px", lg: "80px" }}>
+  return (    
+    <div>
+      {loading ==true ? <Box padding='6' boxShadow='lg' bg='white' marginTop={"50px"}>
+      <SkeletonText mt='4' noOfLines={10} spacing='5' skeletonHeight='10' />
+      </Box>:    <Container maxW={"7xl"} pt={{ base: "50px", md: "40px", lg: "80px" }}>      
       <SimpleGrid
         columns={{ base: 1, lg: 2 }}
         spacing={{ base: 8, md: 10 }}
@@ -93,20 +120,6 @@ export const SingleDetailPage = () => {
             >
               {course.title}
             </Heading>
-            <Heading
-              //color={useColorModeValue("gray.900", "gray.400")}
-              lineHeight={1.5}
-              fontWeight={600}
-              fontSize={{ base: "xl", sm: "xl", lg: "2xl" }}
-              // width={"20%"}
-              color={"red"}
-              display={"flex"}
-            >
-              Price:
-              <Text as={"span"} color={"black"} ml={"4px"} fontWeight={300}>
-                ₹{course.price}
-              </Text>
-            </Heading>
           </Box>
 
           <Stack
@@ -114,10 +127,11 @@ export const SingleDetailPage = () => {
             direction={"column"}
             divider={
               <StackDivider
-                borderColor={useColorModeValue("gray.200", "gray.600")}
+                borderColor={"gray.600"}
               />
             }
           >
+            <Heading fontSize={"lg"} marginTop={"15px"} color={"gray.500"}>What you'll learn</Heading>
             <VStack spacing={{ base: 4, sm: 6 }}>
               <Text fontSize={"lg"}>{course.description}</Text>
             </VStack>
@@ -125,7 +139,7 @@ export const SingleDetailPage = () => {
             <Box>
               <Text
                 fontSize={{ base: "16px", lg: "18px" }}
-                color={useColorModeValue("yellow.500", "yellow.300")}
+                color={"yellow.500"}
                 fontWeight={"500"}
                 textTransform={"uppercase"}
                 mb={"4"}
@@ -138,6 +152,14 @@ export const SingleDetailPage = () => {
                 spacing={10}
               >
                 <List spacing={1}>
+                <ListItem>
+                    <Flex justifyContent="space-between">
+                      <Text as={"span"} fontWeight={"bold"}>
+                        Price:
+                      </Text>
+                      {course.price ? course.price : null}
+                    </Flex>
+                  </ListItem>
                   <ListItem>
                     <Flex justifyContent="space-between">
                       <Text as={"span"} fontWeight={"bold"}>
@@ -207,12 +229,12 @@ export const SingleDetailPage = () => {
           </Stack>
 
           {token ? (
-            <Link to={"/cart"} >
-              {" "}
+            // <Link to={"/cart"} >
+              //  {" "}
               <Box margin={"auto"}>
               <Button
                 rounded={"none"}                
-                w={"lg"}
+                w={"xl"}
                 mt={10}
                 size={"lg"}
                 py={"7"}
@@ -229,11 +251,11 @@ export const SingleDetailPage = () => {
                 onClick={addToCart}
                 borderRadius={"5px"}
                 // position={"fixed"}
-              >
+              >  
                 Buy Now
               </Button>
               </Box>
-            </Link>
+            //  {/* </Link> */}
           ) : (
             <Link to="/signin">
               <Button
@@ -260,5 +282,8 @@ export const SingleDetailPage = () => {
         </Stack>
       </SimpleGrid>
     </Container>
+    }
+    </div>
+
   );
 };

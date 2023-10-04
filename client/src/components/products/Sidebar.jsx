@@ -11,16 +11,19 @@ import {
   Container,
   Box,
   Input,
+  SkeletonText,
 } from "@chakra-ui/react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Card from "../Card";
+import { ProductSide } from "../../pages/ProductSide";
+import Product from "./product";
 
 const Sidebar = () => {
-    const sidebarStyles = {
-        position: "sticky",
-        top: "0",
-        maxHeight: "700px",
-      };
+  const sidebarStyles = {
+    position: "sticky",
+    top: "0",
+    maxHeight: "700px",
+  };
   const [categoryFilters, setCategoryFilters] = useState({
     Python: false,
     "Web Development": false,
@@ -49,7 +52,7 @@ const Sidebar = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const categoryQuery = queryParams.get("category");
-    const sortByQuery = queryParams.get("field"); // Change to field
+    const sortByQuery = queryParams.get("sort"); // Change to field
     const sortOrderQuery = queryParams.get("sortBy"); // Change to sortBy
 
     if (categoryQuery) {
@@ -80,32 +83,37 @@ const Sidebar = () => {
     const categoryQuery = selectedCategories.join(",");
     const queryString = new URLSearchParams({
       category: categoryQuery,
-      field: sortBy,
-      sortBy: sortOrder,
+      sort: sortBy,
+      sortOrder: sortOrder,
     }).toString();
     navigate(`?${queryString}`);
   }, [categoryFilters, sortBy, sortOrder, navigate]);
   // Api call-----------------------------------------
   useEffect(() => {
     const queryParams = new URLSearchParams();
-
+  
     if (sortBy) {
       queryParams.append("field", sortBy);
     }
     queryParams.append("sortBy", sortOrder);
-
+  
     const selectedCategories = categories.filter(
       (category) => categoryFilters[category]
     );
     selectedCategories.forEach((category) =>
       queryParams.append("category", category)
     );
-
+  
     const queryString = queryParams.toString();
-
-    let url = `https://etutorhub-server.onrender.com/course?${queryString}`;
-
-    fetch(url)
+  
+    let url = `https://anxious-bull-glasses.cyclic.app/course?${queryString}`;
+  
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Authorization": localStorage.getItem('frontendtoken')
+      }
+    })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -173,9 +181,9 @@ const Sidebar = () => {
       console.log(data.course)
       setCourse(data.course);
       setIsLoading(false);
-      setShowResults(true); 
-      
-      
+      setShowResults(true);
+
+
     } catch (error) {
       console.error("Error fetching search results:", error);
       setIsLoading(false);
@@ -183,10 +191,10 @@ const Sidebar = () => {
   }
 
   return (
-    <Flex>
+    <Flex  paddingTop={"100px"}>
       <Flex
         style={sidebarStyles} // Apply the sidebar styles here
-       height={"700px"}
+        height={"auto"}
         direction="column"
         width={{
           sm: "13em", // 480px
@@ -212,21 +220,9 @@ const Sidebar = () => {
           size={{ base: "sm", sm: "md", md: "l", lg: "l", xl: "xl" }}
           marginBottom="20px"
         >
-          Search Here 
+          Search Here
         </Heading>
-        <Input value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)} placeholder="Seach..."/>
-        {categories.map((category) => (
-          <Checkbox
-            key={category}
-            name={category}
-            isChecked={categoryFilters[category]}
-            onChange={handleCategoryFilterChange}
-            marginTop={"10px"}
-            marginBottom={{ base: "10px", md: "15px", xl: "20px" }}
-          >
-            {category}
-          </Checkbox>
-        ))}
+        <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Seach..." />
         <Heading
           as="h2"
           size={{ base: "sm", sm: "md", md: "l", lg: "l", xl: "xl" }}
@@ -257,28 +253,26 @@ const Sidebar = () => {
           </Select>
         )}
       </Flex>
-      <Flex direction={"column"}>
-        {/* <MessageDisplay totalCourses={totalCourses} /> */}
-        <Flex>
-          <Grid
-            templateColumns={{
-              base: "repeat(1, 1fr)", // For the base screen size (extra small)
-              sm: "repeat(1, 1fr)", // For the small screen size
-              md: "repeat(2, 1fr)", // For the medium screen size
-              lg: "repeat(3, 1fr)", // For the large screen size
-              xl: "repeat(4, 1fr)", // For extra large screen size
-            }}
-            gap="20px"
-            width="100%"
-          >
-            {course?.map((el) => (
-              <GridItem key={el._id}>
-                <Card {...el} />
-              </GridItem>
-            ))}
-          </Grid>
-        </Flex>
-      </Flex>
+      {course?
+    <Grid
+      templateColumns={{
+        base: "repeat(1, 1fr)", // For the base screen size (extra small)
+        sm: "repeat(2, 1fr)", // For the small screen size (two columns)
+        md: "repeat(2, 1fr)", // For the medium screen size (three columns)
+        lg: "repeat(2, 1fr)", // For the large screen size (three columns)
+        xl: "repeat(3, 1fr)", // For extra large screen size (three columns)
+      }}
+      // gap="20px"
+      // width="100%"
+    >
+      {course.map((el) => (
+            <Box key={el._id}>
+              <Card {...el} />
+            </Box>
+          ))}
+    </Grid> :<Product/>
+      }
+
     </Flex>
   );
 };

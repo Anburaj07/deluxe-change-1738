@@ -8,8 +8,8 @@ import { Link, unstable_HistoryRouter } from 'react-router-dom';
 export const PageNotFound = () => {
     return (
         <Link to={"/"}>
-            <Box w={"100%"} height={"100px"}>
-                <Image width={"100%"} height="100vh" src={img} alt="akash" />
+            <Box w={"100%"}>
+                <Image width={"100%"} src={img} alt="akash" />
             </Box>
         </Link>
 
