@@ -23,29 +23,30 @@
 
 
 
-Welcome to our <b>Quick Loan</b>! We are your one-stop destination for all your financial needs. Our platform offers a wide range of loan options, tailored to suit individual requirements. From personal loans to home mortgages, and small business funding to student loans, we have partnered with reputable lenders to provide you with competitive interest rates and flexible repayment terms.
+"Welcome to our <b>e-Tutor Hub</b>! We are your ultimate destination for a world of knowledge and learning. Our platform is designed to cater to all your educational needs, offering a diverse array of courses to suit your individual learning preferences. From programming languages to creative arts, and data science to business skills, we've partnered with esteemed educators to bring you a vast selection of courses.
 
-Our user-friendly interface ensures a smooth and secure application process, with quick approvals to get you the funds you need when you need them most. Our team of financial experts is ready to assist you at every step, offering personalized guidance and support.
+Navigating our user-friendly interface, you'll experience a seamless and secure learning journey. Quick enrollment, intuitive course discovery, and efficient progress tracking are just a few clicks away. Our commitment to your educational success is complemented by a dedicated team of instructors and support staff, ready to assist you at every step of your learning adventure.
 
-Rest assured, your data is protected with the highest level of security measures in place. So, whether you're planning a major purchase, consolidating debt, or facing unexpected expenses, trust us to be your reliable financial partner. Start your journey towards financial stability and success today with our loan providing website.
+Rest assured, your personal information is safeguarded with the highest level of security measures. Whether you're acquiring new skills for career growth, personal development, or simply exploring a new hobby, trust us to be your reliable educational companion. Embark on your learning journey with e-Tutor Hub today and empower yourself with knowledge and expertise!"
 
 
 # Tech Stacks
 
 ![](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![](https://img.shields.io/badge/Babel-F9DC3E?style=for-the-badge&logo=babel&logoColor=white)
 ![](https://img.shields.io/badge/Chakra--UI-319795?style=for-the-badge&logo=chakra-ui&logoColor=white)
 ![](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)
+![](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
 
 # Features
 - Authentication
-- Check Eligibility
-- Choose a Loan by Category
-- Select our Partner Bank
-- Proceed With the loan Application
-- Get Approved from Backend 
+- Browse Courses on the Homepage and LandingPage
+- View Course Details in Single Page View
+- Subscribe to Courses
+- Cart functionality
 
 # Different Pages of Website
 ### Homepage
