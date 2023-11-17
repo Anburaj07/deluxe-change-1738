@@ -17,13 +17,13 @@ const password=(req,res,next)=>{
         if(pass[i]<=9 && pass[i]>=0){
             obj["N"]=false
         }
-        if(pass[i]<="*" && pass[i]>="!"){
+        if(pass[i]<="@" && pass[i]>="!"){
             obj["S"]=false
         }
     }
     for(let i in obj){
         if(obj[i]){
-            return res.status(400).send("Password Must contain atleast 1 lowercase 1 uppercase 1 Number and 1 special characters")
+            return res.status(400).json({msg:"Password Must contain atleast 1 lowercase 1 uppercase 1 Number and 1 special characters"})
         }
     }
     next()
