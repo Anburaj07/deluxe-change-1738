@@ -9,10 +9,10 @@ import {
   Link,
   Button,
   Image,
-  Heading
+  Heading,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
-import logo from "../images/eTutorhub.jpeg"
+import logo from "../images/eTutorhub.jpeg";
 const Navbar = () => {
   const isMobile = useBreakpointValue({ base: true, lg: false });
   const navigate = useNavigate();
@@ -21,8 +21,7 @@ const Navbar = () => {
   const username = localStorage.getItem("username");
   const handleLogout = () => {
     localStorage.removeItem("frontendtoken");
-    navigate("/")
-
+    navigate("/");
   };
   const fontSize = useBreakpointValue({
     base: "10px",
@@ -56,20 +55,15 @@ const Navbar = () => {
         paddingLeft={"20px"}
       >
         <Link href="/">
-          <Image src={logo} width={"15%"} borderRadius={"50%"} /></Link>
-
+          <Image src={logo} width={"15%"} borderRadius={"50%"} />
+        </Link>
       </Flex>
-
 
       {!isMobile && (
         <Flex align="center">
-
           {token ? (
             <>
-
-            {/* <Heading paddingRight={"10px"}> Hi user</Heading> */}
-              {/* <Link href="/mylearning"
-                textDecoration="none"
+              <Button
                 marginRight="10px"
                 padding="10px"
                 _hover={{
@@ -83,23 +77,8 @@ const Navbar = () => {
                 color="white"
                 bg="black"
                 display={{ base: "none", md: "block" }}
-
-              >My Courses</Link> */}
-                            <Button
-                marginRight="10px"
-                padding="10px"
-                _hover={{
-                  bgColor: "white",
-                  color: "black",
-                  border: "2px solid black",
-                  // textDecoration: "none",
-                }}
-                borderRadius="5px"
-                // fontWeight="bold"
-                color="white"
-                bg="black"
-                display={{ base: "none", md: "block" }}
-              >{username}               
+              >
+                {username}
               </Button>
 
               <Button
@@ -130,7 +109,8 @@ const Navbar = () => {
                 padding="10px"
                 //  height={"100px"}
 
-                width={"150px"} _hover={{
+                width={"150px"}
+                _hover={{
                   bgColor: "white",
                   color: "#9904fc",
                   border: "2px solid #9904fc",
@@ -145,32 +125,32 @@ const Navbar = () => {
                 Login
               </Link>
               <Link
-                          href="/signup"
-                          textDecoration="none"
-                          marginRight="10px"
-                          padding="10px"
-                          //  height={"100px"}
-          
-                          width={"150px"} _hover={{
-                            bgColor: "white",
-                            color: "#9904fc",
-                            border: "2px solid #9904fc",
-                            // textDecoration: "none",
-                          }}
-                          borderRadius="5px"
-                          // fontWeight="bold"
-                          color="white"
-                          bg="green"
-                          display={{ base: "none", md: "block" }}
-                        >
-                          SignUp
-                        </Link>
+                href="/signup"
+                textDecoration="none"
+                marginRight="10px"
+                padding="10px"
+                //  height={"100px"}
+
+                width={"150px"}
+                _hover={{
+                  bgColor: "white",
+                  color: "#9904fc",
+                  border: "2px solid #9904fc",
+                  // textDecoration: "none",
+                }}
+                borderRadius="5px"
+                // fontWeight="bold"
+                color="white"
+                bg="green"
+                display={{ base: "none", md: "block" }}
+              >
+                SignUp
+              </Link>
             </Box>
           )}
         </Flex>
       )}
-
     </Flex>
   );
-}
-export default Navbar
+};
+export default Navbar;

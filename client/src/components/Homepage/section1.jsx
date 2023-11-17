@@ -72,7 +72,7 @@ const Section1 = () => {
                     >
                         Join for Free
                     </Button>
-                    <Link to={token?"/productSide":"/sigin"} >
+                    <Link to={token?"/productSide":"/signin"} >
                     <Button
                         colorScheme="#a435f0"
                         color="#a435f0"

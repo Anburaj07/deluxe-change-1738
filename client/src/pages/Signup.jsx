@@ -86,7 +86,7 @@ const SignUp = () => {
       .post("https://etutorhub-server.onrender.com/users/register", payload)
       .then((res) => {
         //alert(res.data.msg);
-        console.log(res,'res')
+        console.log(res.data,'res')
         if (res.data.msg === "The new user has been registered") {
           signupSuccess(res.data.msg);
           navigate("/signin");
