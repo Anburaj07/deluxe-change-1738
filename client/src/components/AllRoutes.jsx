@@ -9,6 +9,7 @@ import { ProductSide } from '../pages/ProductSide'
 import { PageNotFound } from '../pages/PageNotFound'
 import Cart from '../pages/Cart'
 import { PrivateRoute } from './PrivateRoute'
+import Checkout from '../pages/Checkout'
 
 const AllRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const AllRoutes = () => {
 
        <Route path='/cart' element={<Cart/>} />
        <Route path='/detail/:courseId' element={<PrivateRoute><SingleDetailPage/></PrivateRoute>} />
+       <Route path='/payment' element={<Checkout/>} />
         <Route path="*" element={<PageNotFound/>}/>
     </Routes>
   )
